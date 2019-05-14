@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particle-api-js@7/dist/particle.min.js"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+    <title>My Smart Shoe</title>
+  </head>
+
+<body>
+<div class='container'>
+  <div class="row">
+    <div class="col">
+      <div id="RGB"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <input
+        id="red"
+        data-slider-id='redSlider'
+        type="text"
+        data-slider-min="0"
+        data-slider-max="255"
+        data-slider-step="1"
+        data-slider-value="0"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <input
+        id="green"
+        data-slider-id='greenSlider'
+        type="text"
+        data-slider-min="0"
+        data-slider-max="255"
+        data-slider-step="1"
+        data-slider-value="0"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <input
+        id="blue"
+        data-slider-id='blueSlider'
+        type="text"
+        data-slider-min="0"
+        data-slider-max="255"
+        data-slider-step="1"
+        data-slider-value="0"
+      />
+    </div>
+  </div>
+  <div class="row justify-content-md-center">&nbsp;</div>
+  <div class="row justify-content-md-center">
+    <div class="col">
+      <button type="button" class="btn btn-primary" onClick="callParticle()">Send Color</button>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">&nbsp;</div>
+  <div class="row justify-content-md-center">
+    <div class="col">
+      <button type="button" class="btn btn-primary" onClick="callRainbow()">Rainbow</button>
+    </div>
+  </div>
+    <div class="row justify-content-md-center">&nbsp;</div>
+  <div class="row justify-content-md-center">
+    <div class="col">
+      <button type="button" class="btn btn-primary" onClick="callChase()">Chase</button>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js" integrity="sha256-nviKEC91moGfyFMMzT31WyNxuAvIIgOSkSGi7K6U7EU=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css" integrity="sha256-+xqVrdbLgHjiKF8ULvcwzQ545r7lCVfOqXlNJCB3XOg=" crossorigin="anonymous" />
+<script>
+  var particle = new Particle();
+  var lastRed = 0;
+  var red = 0;
+  var lastGreen = 0;
+  var green = 0;
+  var lastBlue = 0;
+  var blue = 0;
+
+  var RGBChange = function() {
+    $('#RGB').css('background', 'rgb('+redSlider.getValue()+','+greenSlider.getValue()+','+blueSlider.getValue()+')')
+  };
+
+  var redSlider = $('#red').slider()
+    .on('slide', RGBChange)
+    .data('slider');
+
+  var greenSlider = $('#green').slider()
+    .on('slide', RGBChange)
+    .data('slider');
+
+    var blueSlider = $('#blue').slider()
+    .on('slide', RGBChange)
+    .data('slider');
+
+  var data = {
+    command: "",
+    red: red,
+    green: green,
+    blue: blue,
+  }
+
+  console.log(data);
+
+  var fnPr = particle.callFunction({
+    deviceId: 'e00fce68121658b7111b1ec5',
+    name:'led',
+    argument: JSON.stringify(data),
+    auth: '0a724e40c69174046c07f4b9cb92ef1c1beb2fd6' }
+  );
+
+  function getRandomInt() {
+    return Math.floor(Math.random() * Math.floor(255));
+  }
+
+ function callRainbow(){
+   _callParticle("rainbow");
+ }
+
+ function callChase(){
+  data.red = redSlider.getValue();
+  data.green = greenSlider.getValue();
+  data.blue = blueSlider.getValue();
+
+  _callParticle("chase");
+ }
+
+ function _callParticle(command){
+   data.command = command;
+   console.log(data);
+   particle.callFunction({
+      deviceId: 'e00fce68121658b7111b1ec5',
+      name:'led',
+      argument: JSON.stringify(data),
+      auth: '0a724e40c69174046c07f4b9cb92ef1c1beb2fd6' }
+    ).then(
+      function(data) {
+        console.log('Function called succesfully:', data);
+      }, function(err) {
+        console.log('An error occurred:', err);
+      });
+ }
+
+  function callParticle(){  
+    data.command="";
+    data.red = redSlider.getValue();
+    data.green = greenSlider.getValue();
+    data.blue = blueSlider.getValue();
+    
+
+    console.log(data);
+    particle.callFunction({
+      deviceId: 'e00fce68121658b7111b1ec5',
+      name:'led',
+      argument: JSON.stringify(data),
+      auth: '0a724e40c69174046c07f4b9cb92ef1c1beb2fd6' }
+    ).then(
+      function(data) {
+        console.log('Function called succesfully:', data);
+      }, function(err) {
+        console.log('An error occurred:', err);
+      });
+  }
+</script>
+</body>

@@ -1,0 +1,25 @@
+body{
+    background: darkgray;
+}
+#redSlider .slider-selection {
+	background: #FF8282;
+}
+#redSlider .slider-handle {
+	background: red;
+}
+#greenSlider .slider-selection {
+	background: #428041;
+}
+#greenSlider .slider-handle {
+	background: green;
+}
+#blueSlider .slider-selection {
+	background: #8283FF;
+}
+#blueSlider .slider-handle {
+	border-bottom-color: blue;
+}
+#RGB {
+    height: 20px;
+    background: rgb(128, 128, 128);
+}
